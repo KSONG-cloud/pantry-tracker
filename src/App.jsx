@@ -18,6 +18,10 @@ function App() {
   ])
 
 
+  // Sorting of pantry items
+  const [sortOption, setSortOption] = useState('urgency');
+  const [sortOrder, setSortOrder] = useState('asc');
+
 
   // Function to add a new item
   const addItem = (item) => {
@@ -79,6 +83,32 @@ function App() {
 
   }
 
+  const getSortedItems = () => {
+    const items = [...pantryItems];
+    let order = 1;
+    if (sortOrder == 'desc') {
+      order = -1;
+    }
+
+
+    if (sortOption === 'urgency') {
+      items.sort((a, b) => order * (getExpiryStatus(b).urgency - getExpiryStatus(a).urgency));
+    } else if (sortOption === 'type') {
+      items.sort((a, b) => {
+        if (sortOrder == 'asc') {
+          return a.name.localeCompare(b.name);
+        } else {
+          return b.name.localeCompare(a.name);
+        }      
+      }); // or a.type.localeCompare(b.type)
+    } else if (sortOption === 'addedDate') {
+      items.sort((a, b) => order * (new Date(b.addedDate) - new Date(a.addedDate))); // newest first
+    }
+
+    return items;
+  }
+
+  
 
   return (
     <div className='App'>
@@ -92,49 +122,36 @@ function App() {
       <main className='main-content'>
         <section className='pantry-section'>
           <h2>Your Pantry Items</h2>
+
+
+
+          <div className='sort-container'>
+            <div className='sort-section'>
+              <label htmlFor='sort'>Sort by: </label>
+              <select 
+                id='sort' 
+                value={sortOption} 
+                onChange={(e) => setSortOption(e.target.value)}
+                className='sort-select'
+              >
+                <option value="urgency">Urgency</option>
+                <option value="type">Type</option>
+                <option value="addedDate">Time Added</option>
+              </select>
+              <div className="sort-toggle" onClick={() => setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc')}>
+                <span className={`arrow-up ${sortOrder === 'asc' ? 'active' : 'inactive'}`}>▲</span>
+                <span className={`arrow-down ${sortOrder === 'desc' ? 'active' : 'inactive'}`}>▼</span>
+              </div>
+            </div>
+          </div>
+          
+          
+
           {pantryItems.length === 0 ? (
             <p>Your pantry is empty! Add some items below.</p>
           ) : (
             <div className='items-grid'>
-              {/* {pantryItems.map(item => (
-                <div
-                  key={item.id} 
-                  className={`item-card ${getExpiryStatus(item) === 'expiringSoon' ? 'expiring-soon' : ''} ${status === 'expired' ? 'expired' : ''}`}
-                >
-                  <h3>{item.name}</h3>
-                  <p>Quantity: {item.quantity} {item.unit}</p>
-                  {item.expirationDate ? (
-                    <p>Expires: {item.expirationDate}</p>
-                  ) : item.bestBeforeDate ? (
-                    <p>Best Before: {item.bestBeforeDate}</p>
-                  ) : (
-                    <p>Added on: {item.addedDate}</p>
-                  )}
-                  {getExpiryStatus(item) === 'expired' && (
-                    <div className='alert expired-alert'>Expired</div>
-                  )}
-                  {getExpiryStatus(item) === 'expiringSoon' && (
-                    <div className='alert expiring-alert'>Expiring soon</div>
-                  )}
-                  {getExpiryStatus(item) === 'pastBestBefore' && (
-                    <div className='alert bestbefore-alert'>Past Best Before</div>
-                  )}
-                  {getExpiryStatus(item) === 'nearBestBefore' && (
-                    <div className='alert bestbefore-alert'>Near Best Before</div>
-                  )}
-                  {getExpiryStatus(item) === 'fresh' && (
-                    <div className='alert fresh-alert'>Fresh</div>
-                  )}
-
-
-                  <button 
-                    onClick={() => removeItem(item.id)}
-                    className='remove-btn'
-                  >Remove
-                  </button>
-                </div>
-              ))} */}
-              {pantryItems.map(item => {
+              {getSortedItems().map(item => {
                 // Get status and optional label from your updated getExpiryStatus function
                 const status = getExpiryStatus(item);
 
@@ -229,6 +246,7 @@ function AddItemForm({ onAddItem }) {
         expirationDate: formData.expirationDate || null,
         bestBeforeDate: formData.bestBeforeDate || null,
         addedDate: new Date().toISOString().split('T')[0]  // Store as YYYY-MM-DD
+        
       });
 
       // Reset form
