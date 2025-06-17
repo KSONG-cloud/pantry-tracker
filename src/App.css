@@ -11,6 +11,15 @@ body {
     sans-serif;
   background-color: #f5f7fa;
   color: #333;
+  
+  
+  display: flex;
+  justify-content: center;
+  /* optional: center vertically too */
+  align-items: center;
+  min-height: 100vh;
+
+  margin: 0;
 }
 
 .App {
@@ -43,6 +52,8 @@ body {
   padding: 2rem;
   display: grid;
   gap: 3rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 /* Sections */
@@ -84,10 +95,89 @@ body {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
+
+/* 
+.item-card.expired {
+  border-color: #4a5568;
+  background-color: #cbd5e0;
+  color: #2d3748;
+}
+
+
 .item-card.expiring-soon {
   border-color: #f56565;
   background-color: #fed7d7;
 }
+
+.item-card.pastBestBefore {
+  border-color: #ecc94b;
+  background-color: #fefcbf;
+  color: #744210;
+} */
+
+/* Expired */
+.item-card.expired {
+  border-color: #4a5568;
+  background-color: #cbd5e0;
+  color: #2d3748;
+}
+
+/* Expiring Soon */
+.item-card.expiring-soon {
+  border-color: #f56565;
+  background-color: #fed7d7;
+}
+
+/* Past Best Before */
+.item-card.past-best-before {
+  border-color: #ecc94b;
+  background-color: #fefcbf;
+  color: #744210;
+}
+
+/* Near Best Before */
+.item-card.near-best-before {
+  border-color: #faf089;
+  background-color: #fefcbf;
+  color: #975a16;
+}
+
+/* Fresh */
+.item-card.fresh {
+  border-color: #68d391;
+  background-color: #f0fff4;
+  color: #276749;
+}
+
+/* Added over 1 week ago */
+.item-card.old_1w {
+  background-color: #f0fdf4;  /* Soft mint green */
+  border-color: #8fbb48;      /* Match the alert */
+  color: #2f855a;             /* Calm green text */
+}
+
+/* Added over 2 weeks ago */
+.item-card.old_2w {
+  background-color: #faf5cc;  /* Light yellow-green */
+  border-color: #d1d947;      /* Desaturated olive */
+  color: #645e12;             /* Mild olive text */
+}
+
+/* Added over 3 weeks ago */
+.item-card.old_3w {
+  background-color: #fef37e;  /* Soft yellow */
+  border-color: #abb705;      /* Golden border */
+  color: #92400e;             /* Dark golden text */
+}
+
+/* Added over 1 month ago */
+.item-card.old_1m {
+  background-color: #ead600;  /* Soft yellow */
+  border-color: #997b00;      /* Golden border */
+  color: #92400e;             /* Dark golden text */
+}
+
+
 
 .item-card h3 {
   color: #2d3748;
@@ -110,6 +200,36 @@ body {
   font-weight: bold;
   text-align: center;
 }
+
+/* 
+.alert.expired-alert {
+  background: #e53e3e;
+  color: white;
+}
+
+.alert.expiring-alert {
+  background: #f56565;
+  color: white;
+}
+
+.alert.bestbefore-alert {
+  background: #ecc94b;
+  color: #744210;
+}
+
+.alert.fresh-alert {
+  background: #12a454;
+  color: white;
+} */
+
+
+.alert.expired-alert { background: #e53e3e; color: white;}
+.alert.expiring-alert { background: #f56565; color: white;}
+.alert.bestbefore-alert { background: #ed8936; color: white;}
+.alert.warn-alert { background: #9a9117; color: #333; color: white;}
+.alert.mild-alert { background: #aab132; color: #333; color: white;}
+.alert.info-alert { background: #8fbb48; color: white;}
+.alert.fresh-alert { background: #48bb78; color: white;}
 
 .remove-btn {
   background: #e53e3e;
@@ -160,6 +280,18 @@ body {
   outline: none;
   border-color: #667eea;
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.required {
+  color: red;
+  margin-left: 2px;
+}
+
+.optional {
+  color: #718096; /* grey */
+  font-weight: normal;
+  /* font-size: 0.9em; */
+  margin-left: 6px;
 }
 
 .add-btn {

@@ -6,9 +6,15 @@ import './App.css'
 function App() {
   // This is where we wiil store the pantry items
   const [pantryItems, setPantryItems] = useState([
-    { id: 1, name: 'Milk', quantity: 1, unit: 'gallon', expirationDate: '2025-12-25' },
-    { id: 2, name: 'Bread', quantity: 1, unit: 'loaf', expirationDate: '2025-12-20' },
-    { id: 3, name: 'Eggs', quantity: 12, unit: 'pieces', expirationDate: '2025-12-30' }
+    { id: 1, name: 'Milk', quantity: 1, unit: 'gallon', expirationDate: '2025-12-25', bestBeforeDate: '2025-06-25' , addedDate: '2025-06-14'},
+    { id: 2, name: 'Bread', quantity: 1, unit: 'loaf', expirationDate: '2025-06-18' , bestBeforeDate: '2025-05-25'  , addedDate: '2025-06-14'},
+    { id: 3, name: 'Eggs', quantity: 12, unit: 'pieces', expirationDate: '2025-06-05' , bestBeforeDate: '2025-05-20' , addedDate: '2025-06-14' },
+    { id: 4, name: 'Eggs', quantity: 12, unit: 'pieces', expirationDate: '2025-08-05' , bestBeforeDate: '2025-05-20' , addedDate: '2025-06-14' },
+    { id: 5, name: 'Chicken', quantity: 12, unit: 'pieces',  addedDate: '2025-06-09' },
+    { id: 6, name: 'Chicken', quantity: 12, unit: 'pieces',  addedDate: '2025-06-02' },
+    { id: 7, name: 'Chicken', quantity: 12, unit: 'pieces',  addedDate: '2025-05-28' },
+    { id: 8, name: 'Chicken', quantity: 12, unit: 'pieces',  addedDate: '2025-05-21' },
+    { id: 9, name: 'Chicken', quantity: 12, unit: 'pieces',  addedDate: '2025-05-02' },
   ])
 
 
@@ -39,6 +45,40 @@ function App() {
     return diffDays <= 3 && diffDays >= 0 ;
   }
 
+  // Function that returns expiry status of foods
+  const getExpiryStatus = (item) => {
+    const today = new Date();
+
+    const useBy = item.expirationDate ? new Date(item.expirationDate) : null;
+    const bestBefore = item.bestBeforeDate ? new Date(item.bestBeforeDate) : null;
+    const addedDate = item.addedDate ? new Date(item.addedDate) : null;
+
+    if (useBy) {
+      const diffDays = Math.ceil((useBy - today) / (1000 * 60 * 60 * 24));
+      if (diffDays < 0) return { status: 'expired', urgency: 5 };
+      if (diffDays <= 3) return { status: 'expiringSoon', urgency: 4 };
+    }
+    
+
+    if (bestBefore) {
+      const diffDays = Math.ceil((bestBefore - today) / (1000 * 60 * 60 * 24));
+      if (diffDays < 0) return { status: 'pastBestBefore', urgency: 3 };
+      if (diffDays <= 3) return { status: 'nearBestBefore', urgency: 2 };
+    }
+
+
+    if (addedDate) {
+      const diffDays = Math.ceil((today - addedDate) / (1000 * 60 * 60 * 24));
+      if (diffDays > 30) return { status: 'old_1m', label: 'Added over a month ago', urgency: 4 };
+      if (diffDays > 21) return { status: 'old_3w', label: 'Added over three weeks ago', urgency: 3 };
+      if (diffDays > 14) return { status: 'old_2w', label: 'Added over two weeks ago', urgency: 2 };
+      if (diffDays > 7) return { status: 'old_1w', label: 'Added over a week ago', urgency: 1 };
+    }
+
+    return { status: 'fresh', urgency: 0 }; // fallback
+
+  }
+
 
   return (
     <div className='App'>
@@ -56,24 +96,101 @@ function App() {
             <p>Your pantry is empty! Add some items below.</p>
           ) : (
             <div className='items-grid'>
-              {pantryItems.map(item => (
+              {/* {pantryItems.map(item => (
                 <div
                   key={item.id} 
-                  className={`item-card ${isExpiringSoon(item.expirationDate) ? 'expiring-soon' : ''}`}
+                  className={`item-card ${getExpiryStatus(item) === 'expiringSoon' ? 'expiring-soon' : ''} ${status === 'expired' ? 'expired' : ''}`}
                 >
                   <h3>{item.name}</h3>
                   <p>Quantity: {item.quantity} {item.unit}</p>
-                  <p>Expires: {item.expirationDate}</p>
-                  {isExpiringSoon(item.expirationDate) && (
-                    <div className='alert'>Expiring soon!</div>
+                  {item.expirationDate ? (
+                    <p>Expires: {item.expirationDate}</p>
+                  ) : item.bestBeforeDate ? (
+                    <p>Best Before: {item.bestBeforeDate}</p>
+                  ) : (
+                    <p>Added on: {item.addedDate}</p>
                   )}
+                  {getExpiryStatus(item) === 'expired' && (
+                    <div className='alert expired-alert'>Expired</div>
+                  )}
+                  {getExpiryStatus(item) === 'expiringSoon' && (
+                    <div className='alert expiring-alert'>Expiring soon</div>
+                  )}
+                  {getExpiryStatus(item) === 'pastBestBefore' && (
+                    <div className='alert bestbefore-alert'>Past Best Before</div>
+                  )}
+                  {getExpiryStatus(item) === 'nearBestBefore' && (
+                    <div className='alert bestbefore-alert'>Near Best Before</div>
+                  )}
+                  {getExpiryStatus(item) === 'fresh' && (
+                    <div className='alert fresh-alert'>Fresh</div>
+                  )}
+
+
                   <button 
                     onClick={() => removeItem(item.id)}
                     className='remove-btn'
                   >Remove
                   </button>
                 </div>
-              ))}
+              ))} */}
+              {pantryItems.map(item => {
+                // Get status and optional label from your updated getExpiryStatus function
+                const status = getExpiryStatus(item);
+
+                // Map status to alert class and display text
+                const statusMap = {
+                  expired: { className: 'expired-alert', text: 'Expired' },
+                  expiringSoon: { className: 'expiring-alert', text: 'Expiring soon' },
+                  pastBestBefore: { className: 'bestbefore-alert', text: 'Past Best Before' },
+                  nearBestBefore: { className: 'bestbefore-alert', text: 'Near Best Before' },
+                  fresh: { className: 'fresh-alert', text: 'Fresh' },
+                  old_1m: { className: 'warn-alert', text: status.label },      // e.g. "Added more than one month ago."
+                  old_3w: { className: 'warn-alert', text: status.label },   // e.g. "Added more than three weeks ago."
+                  old_2w: { className: 'mild-alert', text: status.label },   // e.g. "Added more than two weeks ago."
+                  old_1w: { className: 'info-alert', text: status.label },      // e.g. "Added more than one week ago."
+                };
+
+                // Get CSS classes for the card container based on status
+                const cardClass = [
+                  'item-card',
+                  status.status === 'expired' ? 'expired' : '',
+                  status.status === 'expiringSoon' ? 'expiring-soon' : '',
+                  status.status === 'pastBestBefore' ? 'past-best-before' : '',
+                  status.status === 'nearBestBefore' ? 'near-best-before' : '',
+                  status.status === 'fresh' ? 'fresh' : '',
+                  status.status === 'old_1w' ? 'old_1w' : '',
+                  status.status === 'old_2w' ? 'old_2w' : '',
+                  status.status === 'old_3w' ? 'old_3w' : '',
+                  status.status === 'old_1m' ? 'old_1m' : '',
+                ].join(' ').trim();
+
+                return (
+                  <div key={item.id} className={cardClass}>
+                    <h3>{item.name}</h3>
+                    <p>Quantity: {item.quantity} {item.unit}</p>
+
+                    {item.expirationDate ? (
+                      <p>Expires: {item.expirationDate}</p>
+                    ) : item.bestBeforeDate ? (
+                      <p>Best Before: {item.bestBeforeDate}</p>
+                    ) : (
+                      <p>Added on: {item.addedDate}</p>
+                    )}
+
+                    {statusMap[status.status] && (
+                      <div className={`alert ${statusMap[status.status].className}`}>
+                        {statusMap[status.status].text}
+                      </div>
+                    )}
+
+                    <button onClick={() => removeItem(item.id)} className='remove-btn'>
+                      Remove
+                    </button>
+                  </div>
+                );
+              })}
+
             </div>
           )}
         </section>
@@ -97,18 +214,21 @@ function AddItemForm({ onAddItem }) {
     name: '',
     quantity: '',
     unit: 'pieces',
-    expirationDate: ''
+    expirationDate: '',
+    bestBeforeDate: ''
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (formData.name && formData.quantity && formData.expirationDate) {
+    if (formData.name && formData.quantity) {
       onAddItem({
         name: formData.name,
         quantity: parseInt(formData.quantity),
         unit: formData.unit,
-        expirationDate: formData.expirationDate
+        expirationDate: formData.expirationDate || null,
+        bestBeforeDate: formData.bestBeforeDate || null,
+        addedDate: new Date().toISOString().split('T')[0]  // Store as YYYY-MM-DD
       });
 
       // Reset form
@@ -116,7 +236,8 @@ function AddItemForm({ onAddItem }) {
         name: '',
         quantity: '',
         unit: 'pieces',
-        expirationDate: ''
+        expirationDate: '',
+        bestBeforeDate: ''
       });
     }
   };
@@ -166,28 +287,44 @@ function AddItemForm({ onAddItem }) {
           value={formData.unit}
           onChange={handleChange}
         >
-          <option value="pieces">pieces</option>
+          
+          <option value="g">g</option>
+          <option value="kg">kg</option>
           <option value="lbs">lbs</option>
           <option value="oz">oz</option>
+          <option value="pieces">pieces</option>
+          <option value="slices">slices</option>
+          <option value="ml">ml (millilitre)</option>
+          <option value="l">l (litre)</option>
           <option value="cups">cups</option>
           <option value="gallons">gallons</option>
           <option value="bottles">bottles</option>
           <option value="cans">cans</option>
+          
+          
         </select>
       </div>
 
       <div className="form-group">
-        <label htmlFor="expirationDate">Expiration Date:</label>
+        <label htmlFor="expirationDate">Expiration Date <span className="optional">(optional)</span>:</label>
         <input
           type="date"
           id="expirationDate"
           name="expirationDate"
           value={formData.expirationDate}
           onChange={handleChange}
-          required
         />
       </div>
-
+      <div className="form-group">
+        <label htmlFor="bestBeforeDate">Best Before Date <span className="optional">(optional)</span>:</label>
+        <input
+          type="date"
+          id="bestBeforeDate"
+          name="bestBeforeDate"
+          value={formData.bestBeforeDate}
+          onChange={handleChange}
+        />
+      </div>
       <button type="submit" className="add-btn">
         Add to Pantry
       </button>
