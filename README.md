@@ -5,13 +5,13 @@ A smart web application to track your pantry items, get expiration alerts, and d
 ## Features
 
 ### Current Features ✅
-
-
-### Planned Features 🚧
 - **Inventory Management**: Add, view, and remove pantry items
 - **Expiration Alerts**: Visual warnings for items expiring within 3 days
-- **Responsive Design**: Works seamlessly on desktop and mobile devices
 - **Clean UI**: Modern, intuitive interface with gradient design
+
+### Planned Features 🚧
+
+- **Responsive Design**: Works seamlessly on desktop and mobile devices
 - **Recipe Recommendations**: Get recipe suggestions based on available ingredients
 - **Recipe Ratings**: Rate recipes and see ratings from other cooking websites
 - **Deal Finder**: Get alerts on sales for items you need
