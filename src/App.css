@@ -164,6 +164,24 @@ body {
 }
 
 
+/* Edit button */
+.edit-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #4a5568;
+  transition: color 0.2s;
+}
+
+.edit-btn:hover {
+  color: #2d3748;
+}
+
+
 
 /* Expired */
 .item-card.expired {
@@ -251,27 +269,6 @@ body {
   text-align: center;
 }
 
-/* 
-.alert.expired-alert {
-  background: #e53e3e;
-  color: white;
-}
-
-.alert.expiring-alert {
-  background: #f56565;
-  color: white;
-}
-
-.alert.bestbefore-alert {
-  background: #ecc94b;
-  color: #744210;
-}
-
-.alert.fresh-alert {
-  background: #12a454;
-  color: white;
-} */
-
 
 .alert.expired-alert { background: #e53e3e; color: white;}
 .alert.expiring-alert { background: #f56565; color: white;}
@@ -281,6 +278,13 @@ body {
 .alert.info-alert { background: #8fbb48; color: white;}
 .alert.fresh-alert { background: #48bb78; color: white;}
 
+
+.remove-btn-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
 .remove-btn {
   background: #e53e3e;
   color: white;
@@ -289,8 +293,8 @@ body {
   border-radius: 4px;
   cursor: pointer;
   font-size: 0.9rem;
-  margin-top: 1rem;
   transition: background-color 0.2s;
+  justify-content: end;
 }
 
 .remove-btn:hover {
@@ -303,6 +307,7 @@ body {
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1rem;
   align-items: end;
+  grid-auto-flow: row dense;
 }
 
 .form-group {
@@ -355,6 +360,8 @@ body {
   font-weight: 600;
   transition: all 0.2s;
   height: fit-content;
+  /* justify-self: end; */
+  grid-column: 1 / -1;
 }
 
 .add-btn:hover {
@@ -363,7 +370,7 @@ body {
 }
 
 /* Responsive design */
-@media (max-width: 768px) {
+@media (max-width: 2000px) {
   .main-content {
     padding: 1rem;
     gap: 2rem;
@@ -388,5 +395,23 @@ body {
   
   .add-item-form {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 600px) {
+  .items-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 columns on medium screens */
+  }
+}
+
+@media (min-width: 900px) {
+  .items-grid {
+    grid-template-columns: repeat(3, 1fr); /* 3 columns on wider screens */
+  }
+}
+
+@media (min-width: 1200px) {
+  .items-grid {
+    grid-template-columns: repeat(4, 1fr); /* 3 columns on wider screens */
   }
 }

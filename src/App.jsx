@@ -2,6 +2,7 @@ import { useState } from 'react'
 // import reactLogo from './assets/react.svg'
 // import viteLogo from '/vite.svg'
 import './App.css'
+import EditModal from './components/EditModal';
 
 function App() {
   // This is where we wiil store the pantry items
@@ -22,6 +23,147 @@ function App() {
   const [sortOption, setSortOption] = useState('urgency');
   const [sortOrder, setSortOrder] = useState('asc');
 
+  // For editing pantry items
+  const [editingItem, setEditingItem] = useState(null);
+  const [isModalOpen, setModalOpen] = useState(false);
+
+  // Type map
+  const typeMap = {
+    // Dairy
+    milk: ['Dairy'],
+    cheese: ['Dairy'],
+    yogurt: ['Dairy'],
+    butter: ['Dairy'],
+    cream: ['Dairy'],
+    'cream cheese': ['Dairy'],
+    kefir: ['Dairy'],
+    'sour cream': ['Dairy'],
+
+    // Protein
+    beef: ['Protein'],
+    pork: ['Protein'],
+    lamb: ['Protein'],
+    tofu: ['Protein', 'Vegetarian'],
+    tempeh: ['Protein', 'Vegetarian'],
+    beans: ['Protein', 'Vegetarian'],
+    lentils: ['Protein', 'Vegetarian'],
+    chickpeas: ['Protein', 'Vegetarian'],
+    'black beans': ['Protein', 'Vegetarian'],
+    'kidney beans': ['Protein', 'Vegetarian'],
+    seitan: ['Protein', 'Vegetarian'],
+
+    // Seafood
+    fish: ['Seafood'],
+    salmon: ['Seafood'],
+    tuna: ['Seafood'],
+    shrimp: ['Seafood'],
+    prawn: ['Seafood'],
+    crab: ['Seafood'],
+    lobster: ['Seafood'],
+    scallops: ['Seafood'],
+    mussels: ['Seafood'],
+    clams: ['Seafood'],
+
+    // Poultry
+    chicken: ['Poultry'],
+    turkey: ['Poultry'],
+    duck: ['Poultry'],
+    goose: ['Poultry'],
+
+    // Vegetables
+    carrot: ['Vegetable'],
+    broccoli: ['Vegetable'],
+    spinach: ['Vegetable'],
+    kale: ['Vegetable'],
+    lettuce: ['Vegetable'],
+    cucumber: ['Vegetable'],
+    tomato: ['Vegetable', 'Fruit'], // Botanically fruit, culinarily vegetable
+    onion: ['Vegetable'],
+    garlic: ['Vegetable'],
+    pepper: ['Vegetable', 'Fruit'],
+    potato: ['Vegetable'],
+    pumpkin: ['Vegetable', 'Fruit'],
+    zucchini: ['Vegetable', 'Fruit'],
+    celery: ['Vegetable'],
+    cauliflower: ['Vegetable'],
+    corn: ['Vegetable', 'Grain'],
+
+    // Fruits
+    apple: ['Fruit'],
+    banana: ['Fruit'],
+    orange: ['Fruit'],
+    lemon: ['Fruit'],
+    lime: ['Fruit'],
+    strawberry: ['Fruit'],
+    blueberry: ['Fruit'],
+    raspberry: ['Fruit'],
+    grape: ['Fruit'],
+    watermelon: ['Fruit'],
+    mango: ['Fruit'],
+    peach: ['Fruit'],
+    pear: ['Fruit'],
+    pineapple: ['Fruit'],
+    kiwi: ['Fruit'],
+    cherry: ['Fruit'],
+
+    // Grains & Cereals
+    rice: ['Grain'],
+    wheat: ['Grain'],
+    oats: ['Grain'],
+    barley: ['Grain'],
+    quinoa: ['Grain'],
+    cornmeal: ['Grain'],
+    flour: ['Grain'],
+    pasta: ['Grain'],
+    bread: ['Grain'],
+    cereal: ['Grain'],
+
+    // Nuts & Seeds
+    almond: ['Nut'],
+    walnut: ['Nut'],
+    cashew: ['Nut'],
+    peanut: ['Nut'],
+    pistachio: ['Nut'],
+    sunflower: ['Seed'],
+    pumpkinseed: ['Seed'],
+    flaxseed: ['Seed'],
+
+    // Condiments & Others
+    honey: ['Condiment'],
+    sugar: ['Condiment'],
+    salt: ['Condiment'],
+    peppercorn: ['Condiment'],
+    vinegar: ['Condiment'],
+    oil: ['Condiment'],
+    oliveoil: ['Condiment'],
+    'soy sauce': ['Condiment'],
+    mustard: ['Condiment'],
+    ketchup: ['Condiment'],
+
+    // Beverages
+    coffee: ['Beverage'],
+    tea: ['Beverage'],
+    juice: ['Beverage'],
+    soda: ['Beverage'],
+
+    // Misc / Other
+    chocolate: ['Snack'],
+    biscuit: ['Snack'],
+    cookie: ['Snack'],
+    cracker: ['Snack'],
+
+    // Herbs & Spices
+    basil: ['Herb'],
+    oregano: ['Herb'],
+    thyme: ['Herb'],
+    rosemary: ['Herb'],
+    parsley: ['Herb'],
+    cinnamon: ['Spice'],
+    nutmeg: ['Spice'],
+    cumin: ['Spice'],
+  };
+
+
 
   // Function to add a new item
   const addItem = (item) => {
@@ -39,15 +181,6 @@ function App() {
     setPantryItems(pantryItems.filter(item => item.id !== id));
   }
 
-
-  // Function to check if item is expiring soon (within 3 days)
-  const isExpiringSoon = (expirationDate) => {
-    const today = new Date();
-    const expiry = new Date(expirationDate);
-    const diffTime = expiry - today;
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays <= 3 && diffDays >= 0 ;
-  }
 
   // Function that returns expiry status of foods
   const getExpiryStatus = (item) => {
@@ -109,6 +242,48 @@ function App() {
   }
 
   
+  function getItemTypes(name) {
+    const lowerName = name.toLowerCase();
+    const types = new Set();
+    for (let keyword in typeMap) {
+      if (lowerName.includes(keyword)) {
+        typeMap[keyword].forEach(t => types.add(t));
+      }
+    }
+    return types.size > 0 ? Array.from(types) : ['Other'];
+  }
+
+
+
+  const openEditModal = (item) => {
+    setEditingItem(item);
+    setModalOpen(true);
+  }
+
+  const closeEditModal = () => {
+    setModalOpen(false);
+    setEditingItem(null);
+  }
+
+  const handleItemChange = (updatedItem) => {
+    setEditingItem(updatedItem);
+  }
+
+  const saveItemChanges = () => {
+    setPantryItems((prev) => 
+      prev.map((item) => (item.id === editingItem.id ? editingItem : item))
+    );
+    closeEditModal();
+  }
+
+  const handleEdit = (item) => {
+    // Open an edit form/modal with item details
+    openEditModal(item);
+  };
+
+
+
+
 
   return (
     <div className='App'>
@@ -184,6 +359,13 @@ function App() {
 
                 return (
                   <div key={item.id} className={cardClass}>
+                    <button 
+                      className="edit-btn" 
+                      onClick={() => handleEdit(item)}
+                      title='Edit Item'
+                    >
+                      ✏️
+                    </button>
                     <h3>{item.name}</h3>
                     <p>Quantity: {item.quantity} {item.unit}</p>
 
@@ -200,10 +382,11 @@ function App() {
                         {statusMap[status.status].text}
                       </div>
                     )}
-
-                    <button onClick={() => removeItem(item.id)} className='remove-btn'>
-                      Remove
-                    </button>
+                    <div className='remove-btn-wrapper'>
+                      <button onClick={() => removeItem(item.id)} className='remove-btn'>
+                        Remove
+                      </button>
+                    </div>
                   </div>
                 );
               })}
@@ -217,6 +400,17 @@ function App() {
           <AddItemForm onAddItem={addItem} />
         </section>
       </main>
+
+
+      {isModalOpen && (
+        <EditModal
+          item={editingItem}
+          isOpen={isModalOpen}
+          onClose={closeEditModal}
+          onSave={saveItemChanges}
+          onChange={handleItemChange}
+        />
+      )}
     </div>
   )
 
@@ -245,8 +439,8 @@ function AddItemForm({ onAddItem }) {
         unit: formData.unit,
         expirationDate: formData.expirationDate || null,
         bestBeforeDate: formData.bestBeforeDate || null,
-        addedDate: new Date().toISOString().split('T')[0]  // Store as YYYY-MM-DD
-        
+        addedDate: new Date().toISOString().split('T')[0],  // Store as YYYY-MM-DD
+        types: getItemTypes(name),
       });
 
       // Reset form
@@ -267,6 +461,10 @@ function AddItemForm({ onAddItem }) {
       [e.target.name]: e.target.value
     });
   };
+
+
+  
+
 
 
   return (
@@ -350,26 +548,6 @@ function AddItemForm({ onAddItem }) {
   );
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
