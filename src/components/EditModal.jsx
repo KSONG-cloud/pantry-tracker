@@ -1,5 +1,20 @@
 import React from 'react';
+import CreatableSelect from 'react-select/creatable';
+
 import './EditModal.css';
+
+const typeOptions = [
+  { value: 'Dairy', label: 'Dairy' },
+  { value: 'Protein', label: 'Protein' },
+  { value: 'Seafood', label: 'Seafood' },
+  { value: 'Poultry', label: 'Poultry' },
+  { value: 'Vegetable', label: 'Vegetable' },
+  { value: 'Fruit', label: 'Fruit' },
+  { value: 'Grain', label: 'Grain' },
+  { value: 'Beverage', label: 'Beverage' },
+  { value: 'Snack', label: 'Snack' },
+  { value: 'Condiment', label: 'Condiment' }
+];
 
 
 const EditModal = ({ item, isOpen, onClose, onSave, onChange }) => {
@@ -49,11 +64,18 @@ const EditModal = ({ item, isOpen, onClose, onSave, onChange }) => {
                         />
                     </label>
                     <label>
-                        Type:
-                        <input
-                            type='text' // But this might be a list!!!! TODO
-                            value = {item.type || ''}
-                            onChange={(e) => onChange({...item, type: e.target.value })}
+                        Type(s):
+                        <CreatableSelect 
+                            isMulti
+                            className='type-selector'
+                            options={typeOptions}
+                            value={(item.type || []).map(t => ({ value: t, label: t}))}
+                            onChange={(selected) => 
+                                onChange({
+                                    ...item,
+                                    type: selected.map(option => option.value)
+                                })
+                            }
                         />
                     </label>
                     <div className="modal-buttons">
