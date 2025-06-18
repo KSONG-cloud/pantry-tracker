@@ -83,9 +83,9 @@ pantry-tracker/
 ## Development Roadmap
 
 ### Phase 1: Core Functionality (Current)
-- [ ] Basic inventory tracking
-- [ ] Expiration date alerts
-- [ ] Responsive UI design
+- [x] Basic inventory tracking
+- [x] Expiration date alerts
+- [x] Responsive UI design
 - [ ] Local storage persistence
 - [ ] Search and filter functionality
 
@@ -123,7 +123,7 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ## Contact
 
-Your Name - your.email@example.com
+Your Name - kwanshengo.work@gmail.com
 
 Project Link: [https://github.com/KSONG-cloud/pantry-tracker](https://github.com/KSONG-cloud/pantry-tracker)
 
