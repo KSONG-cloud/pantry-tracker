@@ -5,6 +5,7 @@ import './App.css'
 import EditModal from './components/EditModal';
 import ItemCard from './components/ItemCard';
 import AddItemForm from './components/AddItemForm';
+import SortControl from './components/SortControl';
 
 function App() {
   // This is where we wiil store the pantry items
@@ -153,29 +154,12 @@ function App() {
         <section className='pantry-section'>
           <h2>Your Pantry Items</h2>
 
-
-
-          <div className='sort-container'>
-            <div className='sort-section'>
-              <label htmlFor='sort'>Sort by: </label>
-              <select 
-                id='sort' 
-                value={sortOption} 
-                onChange={(e) => setSortOption(e.target.value)}
-                className='sort-select'
-              >
-                <option value="urgency">Urgency</option>
-                <option value="type">Type</option>
-                <option value="addedDate">Time Added</option>
-              </select>
-              <div className="sort-toggle" onClick={() => setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc')}>
-                <span className={`arrow-up ${sortOrder === 'asc' ? 'active' : 'inactive'}`}>▲</span>
-                <span className={`arrow-down ${sortOrder === 'desc' ? 'active' : 'inactive'}`}>▼</span>
-              </div>
-            </div>
-          </div>
-          
-          
+          <SortControl 
+            sortOption={sortOption} 
+            setSortOption={setSortOption} 
+            sortOrder={sortOrder} 
+            setSortOrder={setSortOrder}
+          />
 
           {pantryItems.length === 0 ? (
             <p>Your pantry is empty! Add some items below.</p>
