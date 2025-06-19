@@ -180,7 +180,10 @@ function App() {
             setSortOrder={setSortOrder}
           />
 
-          {/* <FoodGroupManager foodGroups={foodGroups} setFoodGroups={setFoodGroups} /> */}
+          <FoodGroupManager 
+            pantryItems={pantryItems}
+            getExpiryStatus={getExpiryStatus}
+          />
 
 
           {pantryItems.length === 0 ? (
