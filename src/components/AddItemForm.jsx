@@ -3,6 +3,8 @@ import React from 'react';
 import CreatableSelect from 'react-select/creatable';
 
 
+import { useFoodGroups } from '../contexts/FoodGroupContext';
+
 const unitOptions = [
   { value: 'g', label: 'g' },
   { value: 'kg', label: 'kg' },
@@ -191,7 +193,7 @@ function InputField({ label, id, name, type = 'text', value, onChange, placehold
 }
 
 
-function SelectField({ label, value, onChange, options }) {
+function SelectField({ label, value, onChange, options, onCreateOption }) {
     return (
         <div className="form-group">
         <label>{label}</label>
@@ -200,6 +202,7 @@ function SelectField({ label, value, onChange, options }) {
             options={options}
             value={value ? { value, label: value } : null}
             onChange={(option) => onChange(option ? option.value : '')}
+            onCreateOption={onCreateOption}
         />
         </div>
     );
@@ -209,6 +212,18 @@ function SelectField({ label, value, onChange, options }) {
 
 
 function ItemForm({ formData, handleChange, handleSubmit}) {
+
+    const { foodGroups, addGroup, renameGroup, deleteGroup } = useFoodGroups();
+
+    const groupOptions = foodGroups.map(group => ({ value: group, label: group }));
+
+    const handleCreateGroup = (newGroup) => {
+        addGroup(newGroup);               // Add group globally
+        handleChange({                   // Also update the formData.group to newGroup
+        target: { name: 'group', value: newGroup }
+        });
+    };
+
     return (
         <form onSubmit={handleSubmit} className="add-item-form">
             <InputField 
@@ -239,6 +254,13 @@ function ItemForm({ formData, handleChange, handleSubmit}) {
                 options={unitOptions}
             />
 
+            <SelectField 
+                label="Group"
+                value={formData.group}
+                onChange={(newGroup) => handleChange({ target: { name: 'group', value: newGroup } })}
+                options={groupOptions} // TODO!!!!! COME BACK!!!!
+                onCreateOption={handleCreateGroup}
+            />
 
             <InputField
                 label="Expiration Date"
@@ -274,7 +296,8 @@ export default function AddItemForm({ onAddItem }) {
         quantity: '',
         unit: 'pieces',
         expirationDate: '',
-        bestBeforeDate: ''
+        bestBeforeDate: '',
+        group: 'Other'
     });
 
     const handleSubmit = (e) => {
@@ -289,6 +312,7 @@ export default function AddItemForm({ onAddItem }) {
             bestBeforeDate: formData.bestBeforeDate || null,
             addedDate: new Date().toISOString().split('T')[0],  // Store as YYYY-MM-DD
             types: getItemTypes(formData.name),
+            group: formData.group,
         });
 
         // Reset form
@@ -297,7 +321,8 @@ export default function AddItemForm({ onAddItem }) {
             quantity: '',
             unit: 'pieces',
             expirationDate: '',
-            bestBeforeDate: ''
+            bestBeforeDate: '',
+            group: 'Other'
         });
         }
     };

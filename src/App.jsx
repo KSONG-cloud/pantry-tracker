@@ -6,6 +6,9 @@ import EditModal from './components/EditModal';
 import ItemCard from './components/ItemCard';
 import AddItemForm from './components/AddItemForm';
 import SortControl from './components/SortControl';
+import FoodGroupManager from './components/FoodGroupManager';
+
+
 
 function App() {
   // This is where we wiil store the pantry items
@@ -30,7 +33,23 @@ function App() {
   const [editingItem, setEditingItem] = useState(null);
   const [isModalOpen, setModalOpen] = useState(false);
 
-
+  // Food Groups
+  const [foodGroups, setFoodGroups] = useState([
+    'Vegetables',
+    'Fruits',
+    'Dairy & Eggs',
+    'Meat & Seafood',
+    'Grains & Pasta',
+    'Baked Goods',
+    'Legumes & Beans',
+    'Oils & Fats',
+    'Baking & Spices',
+    'Snacks & Sweets',
+    'Beverages',
+    'Condiments & Sauces',
+    'Frozen',
+    'Other'
+  ]);
 
 
 
@@ -161,6 +180,9 @@ function App() {
             setSortOrder={setSortOrder}
           />
 
+          {/* <FoodGroupManager foodGroups={foodGroups} setFoodGroups={setFoodGroups} /> */}
+
+
           {pantryItems.length === 0 ? (
             <p>Your pantry is empty! Add some items below.</p>
           ) : (
@@ -181,7 +203,9 @@ function App() {
 
         <section className='add-item-section'>
           <h2>Add New Items</h2>
-          <AddItemForm onAddItem={addItem} />
+          <AddItemForm 
+            onAddItem={addItem} 
+          />
         </section>
       </main>
 

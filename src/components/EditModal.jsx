@@ -3,6 +3,9 @@ import CreatableSelect from 'react-select/creatable';
 
 import './EditModal.css';
 
+import { useFoodGroups } from '../contexts/FoodGroupContext';
+
+
 const typeOptions = [
   { value: 'Dairy', label: 'Dairy' },
   { value: 'Protein', label: 'Protein' },
@@ -18,8 +21,11 @@ const typeOptions = [
 
 
 const EditModal = ({ item, isOpen, onClose, onSave, onChange }) => {
+    
     if (!isOpen) return null;
 
+    const { foodGroups, addGroup, renameGroup, deleteGroup } = useFoodGroups(); 
+    const groupOptions = foodGroups.map(group => ({ value: group, label: group }));
 
     return (
         <div className='modal-overlay' onClick={onClose}>
@@ -47,6 +53,22 @@ const EditModal = ({ item, isOpen, onClose, onSave, onChange }) => {
                             onChange={(e) => onChange({...item, quantity: e.target.value })}
                         />
                     </label>
+                    <label>
+                        Group:
+                        <CreatableSelect
+                            isClearable
+                            className='group-selector'
+                            options={groupOptions}
+                            value={item.group ? { value: item.group, label: item.group } : null}
+                            onChange={(selected) => 
+                                onChange({
+                                    ...item,
+                                    group: selected ? selected.value : null
+                                })
+                            }
+                        />
+                    </label>
+
                     <label>
                         Expiration Date:
                         <input
