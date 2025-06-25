@@ -4,12 +4,14 @@ import './FoodGroupManager.css';
 
 import { useFoodGroups } from "../contexts/FoodGroupContext";
 
+import ItemDetailModal from "./ItemDetailModal";
 
 
-export default function FoodGroupManager({ pantryItems, getExpiryStatus }) {
+export default function FoodGroupManager({ pantryItems, getExpiryStatus, setViewItem }) {
+
+    /* ======= Food Group stuff ======= */
+
     const { foodGroups, addGroup, renameGroup, deleteGroup } = useFoodGroups();
-
-
 
     // State to hold the name of a new group being typed by the user
     const [newGroupName, setNewGroupName] = useState('');
@@ -35,36 +37,34 @@ export default function FoodGroupManager({ pantryItems, getExpiryStatus }) {
         setEditingIndex(null);
     };
 
+    /* ======= Item View Modal stuff ======= */
 
-    
+    const [selectedItem, setSelectedItem] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const openItemModal = (item) => {
+        setSelectedItem(item);
+        setIsModalOpen(true);
+    };
+
+    const closeItemModal = () => {
+        setSelectedItem(null);
+        setIsModalOpen(false);
+    };
+
+    const handleEditItem = (item) => {
+        closeItemModal();
+        // Optionally open your existing EditModal here
+        
+        console.log("Edit this item:", item);
+    };
 
 
     return (
         <div className="group-manager">
             <h3> Edit Food Groups</h3>
 
-            {/* <ul>
-                {foodGroups. map((group, index) => (
-                    <li key={index}>
-                        {editingIndex === index ? (
-                            <>
-                                <input 
-                                    value={editedName}
-                                    onChange={(e) => setEditedName(e.target.value)}
-                                />
-                                <button onClick={saveEdit}>Save</button>
-                                <button onClick={() => setEditingIndex(null)}>Cancel</button>
-                            </>
-                        ) : (
-                            <>
-                                <span>{group}</span>
-                                <button onClick={() => startEdit(index)}>Rename</button>
-                                <button onClick={() => deleteGroup(index)}>Delete</button>
-                            </>
-                        )}
-                    </li>
-                ))}
-            </ul> */}
+            
             {foodGroups.map(group => {
                 const itemsInGroup = pantryItems.filter(item => item.group === group);
                 console.log(itemsInGroup);
@@ -75,6 +75,8 @@ export default function FoodGroupManager({ pantryItems, getExpiryStatus }) {
                         groupName={group}
                         items={itemsInGroup}
                         getExpiryStatus={getExpiryStatus}
+                        openItemModal={openItemModal}
+                        setViewItem={setViewItem}
                     />
                 );
             })}
@@ -90,6 +92,15 @@ export default function FoodGroupManager({ pantryItems, getExpiryStatus }) {
                 />
                 <button onClick={addGroup}>Add</button>
             </div>
+
+
+            {/* {isModalOpen && selectedItem && (
+                <ItemDetailModal
+                    item={selectedItem}
+                    onClose={closeItemModal}
+                    onEdit={handleEditItem}
+                />
+            )} */}
         </div>
     );
 }
@@ -97,34 +108,10 @@ export default function FoodGroupManager({ pantryItems, getExpiryStatus }) {
 
 
 
-// function FoodGroup({ groupName, items, getExpiryStatus }) {
-//   return (
-//     <section className="food-group">
-//       <h3 className="group-title">{groupName}</h3>
-//       <div className="items-container">
-//         {items.map(item => {
-//           const freshness = getExpiryStatus(item);
-//           return (
-//             <div key={item.id} className="item-card">
-//               <span 
-//                 className="freshness-indicator" 
-//                 style={{ backgroundColor: freshness.color }} 
-//                 title={freshness.label}
-//               />
-//               <span className="item-name">{item.name}</span>
-//               <span className="item-quantity">{item.quantity}</span>
-//               {/* Placeholder for future icons */}
-//               <span className="item-icons" />
-//             </div>
-//           );
-//         })}
-//       </div>
-//     </section>
-//   );
-// }
 
 
-function FoodGroup({ groupName, items, getExpiryStatus }) {
+
+function FoodGroup({ groupName, items, getExpiryStatus, openItemModal, setViewItem }) {
   const containerRef = useRef(null);
   const [layout, setLayout] = useState('grid'); // or 'list'
 
@@ -150,9 +137,14 @@ function FoodGroup({ groupName, items, getExpiryStatus }) {
         {items.map(item => (
           <div
             key={item.id}
-            className="group-item"
+            className={`group-item ${statusToCssClass(getExpiryStatus(item).status)}`}
             title={`Quantity: ${item.quantity}`}
-            style={{ borderLeft: `8px solid ${getExpiryStatus(item).color}` }}
+            // onClick={() => openItemModal(item)}
+            onClick={() => setViewItem(item)}
+            // style={{ 
+            //     borderLeft: `8px solid ${getExpiryStatus(item).color}`, 
+            //     backgroundColor: `${getExpiryStatus(item).color}` 
+            // }}
           >
             <span className="item-name">{item.name}</span>
             <span className="item-quantity">x{item.quantity}</span>
@@ -162,4 +154,11 @@ function FoodGroup({ groupName, items, getExpiryStatus }) {
       </div>
     </section>
   );
+}
+
+
+function statusToCssClass(status) {
+  return status
+    .replace(/([A-Z])/g, '-$1')  // insert dash before uppercase letters
+    .toLowerCase();              // convert to lowercase
 }

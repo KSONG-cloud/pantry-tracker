@@ -7,21 +7,35 @@ import ItemCard from './components/ItemCard';
 import AddItemForm from './components/AddItemForm';
 import SortControl from './components/SortControl';
 import FoodGroupManager from './components/FoodGroupManager';
-
+import ItemDetailModal from './components/ItemDetailModal';
 
 
 function App() {
   // This is where we wiil store the pantry items
   const [pantryItems, setPantryItems] = useState([
-    { id: 1, name: 'Milk', quantity: 1, unit: 'gallon', expirationDate: '2025-12-25', bestBeforeDate: '2025-06-25' , addedDate: '2025-06-14'},
-    { id: 2, name: 'Bread', quantity: 1, unit: 'loaf', expirationDate: '2025-06-18' , bestBeforeDate: '2025-05-25'  , addedDate: '2025-06-14'},
-    { id: 3, name: 'Eggs', quantity: 12, unit: 'pieces', expirationDate: '2025-06-05' , bestBeforeDate: '2025-05-20' , addedDate: '2025-06-14' },
-    { id: 4, name: 'Eggs', quantity: 12, unit: 'pieces', expirationDate: '2025-08-05' , bestBeforeDate: '2025-05-20' , addedDate: '2025-06-14' },
-    { id: 5, name: 'Chicken', quantity: 12, unit: 'pieces',  addedDate: '2025-06-09' },
-    { id: 6, name: 'Chicken', quantity: 12, unit: 'pieces',  addedDate: '2025-06-02' },
-    { id: 7, name: 'Chicken', quantity: 12, unit: 'pieces',  addedDate: '2025-05-28' },
-    { id: 8, name: 'Chicken', quantity: 12, unit: 'pieces',  addedDate: '2025-05-21' },
-    { id: 9, name: 'Chicken', quantity: 12, unit: 'pieces',  addedDate: '2025-05-02' },
+    { id: 1, name: 'Milk', quantity: 1, unit: 'gallon', expirationDate: '2025-12-25', 
+      bestBeforeDate: '2025-06-25' , addedDate: '2025-06-14', group: 'Dairy & Eggs'},
+    { id: 2, name: 'Bread', quantity: 1, unit: 'loaf', expirationDate: '2025-06-18' , 
+      bestBeforeDate: '2025-05-25'  , addedDate: '2025-06-14', group: 'Baked Goods'},
+    { id: 3, name: 'Eggs', quantity: 12, unit: 'pieces', expirationDate: '2025-06-05' , 
+      bestBeforeDate: '2025-05-20' , addedDate: '2025-06-14', group: 'Dairy & Eggs'},
+    { id: 4, name: 'Eggs', quantity: 12, unit: 'pieces', expirationDate: '2025-08-05' , 
+      bestBeforeDate: '2025-05-20' , addedDate: '2025-06-14', group: 'Dairy & Eggs'},
+    { id: 5, name: 'Chicken', quantity: 12, unit: 'pieces',  addedDate: '2025-06-09' ,
+      group: 'Meat & Seafood'
+    },
+    { id: 6, name: 'Chicken', quantity: 12, unit: 'pieces',  addedDate: '2025-06-02' ,
+      group: 'Meat & Seafood'
+    },
+    { id: 7, name: 'Chicken', quantity: 12, unit: 'pieces',  addedDate: '2025-05-28' ,
+      group: 'Meat & Seafood'
+    },
+    { id: 8, name: 'Chicken', quantity: 12, unit: 'pieces',  addedDate: '2025-05-21' ,
+      group: 'Meat & Seafood'
+    },
+    { id: 9, name: 'Chicken', quantity: 12, unit: 'pieces',  addedDate: '2025-05-02' ,
+      group: 'Meat & Seafood'
+    },
   ])
 
 
@@ -33,24 +47,8 @@ function App() {
   const [editingItem, setEditingItem] = useState(null);
   const [isModalOpen, setModalOpen] = useState(false);
 
-  // Food Groups
-  const [foodGroups, setFoodGroups] = useState([
-    'Vegetables',
-    'Fruits',
-    'Dairy & Eggs',
-    'Meat & Seafood',
-    'Grains & Pasta',
-    'Baked Goods',
-    'Legumes & Beans',
-    'Oils & Fats',
-    'Baking & Spices',
-    'Snacks & Sweets',
-    'Beverages',
-    'Condiments & Sauces',
-    'Frozen',
-    'Other'
-  ]);
-
+  // For ItemViewModal
+  const [viewItem, setViewItem] = useState(null);
 
 
   // Function to add a new item
@@ -148,11 +146,13 @@ function App() {
     setPantryItems((prev) => 
       prev.map((item) => (item.id === editingItem.id ? editingItem : item))
     );
+    setViewItem(editingItem);
     closeEditModal();
   }
 
   const handleEdit = (item) => {
     // Open an edit form/modal with item details
+    setViewItem(null);
     openEditModal(item);
   };
 
@@ -183,6 +183,7 @@ function App() {
           <FoodGroupManager 
             pantryItems={pantryItems}
             getExpiryStatus={getExpiryStatus}
+            setViewItem={setViewItem}
           />
 
 
@@ -212,7 +213,7 @@ function App() {
         </section>
       </main>
 
-
+      { /* For EditModal */ }
       {isModalOpen && (
         <EditModal
           item={editingItem}
@@ -222,6 +223,16 @@ function App() {
           onChange={handleItemChange}
         />
       )}
+
+      { /* For ItemViewModal */ }
+      {viewItem && (
+        <ItemDetailModal 
+          item={viewItem}
+          onClose={() => setViewItem(null)}
+          onEdit={handleEdit}
+        />
+      )}
+
     </div>
   );
 }

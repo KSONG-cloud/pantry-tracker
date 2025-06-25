@@ -66,3 +66,18 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+
+
+/* modal-root stuff */
+
+/* in index.css or a global CSS file */
+#modal-root {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none; /* so modal contents handle clicks, not this container */
+  z-index: 1000;
+}
