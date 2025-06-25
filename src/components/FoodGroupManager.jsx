@@ -7,7 +7,7 @@ import { useFoodGroups } from "../contexts/FoodGroupContext";
 import ItemDetailModal from "./ItemDetailModal";
 
 
-export default function FoodGroupManager({ pantryItems, getExpiryStatus, setViewItem }) {
+export default function FoodGroupManager({ pantryItems, setPantryItems, getExpiryStatus, setViewItem }) {
 
     /* ======= Food Group stuff ======= */
 
@@ -60,6 +60,29 @@ export default function FoodGroupManager({ pantryItems, getExpiryStatus, setView
     };
 
 
+    /* ======= Dragging Group Item stuff ======= */
+
+    const [draggedItem, setDraggedItem] = useState(null);
+
+    const handleDragStart = (item) => {
+      setDraggedItem(item);
+    };
+
+    const handleDrop = (targetGroup) => {
+      if (!draggedItem) return;
+
+      const updatedItems = pantryItems.map(item => {
+        if (item.id === draggedItem.id) {
+          return {...item, group: targetGroup}
+        }
+        return item;
+      });
+
+      setPantryItems(updatedItems);
+      setDraggedItem(null);
+    };
+
+
     return (
         <div className="group-manager">
             <h3> Edit Food Groups</h3>
@@ -77,6 +100,8 @@ export default function FoodGroupManager({ pantryItems, getExpiryStatus, setView
                         getExpiryStatus={getExpiryStatus}
                         openItemModal={openItemModal}
                         setViewItem={setViewItem}
+                        handleDragStart={handleDragStart}
+                        handleDrop={handleDrop}
                     />
                 );
             })}
@@ -92,15 +117,6 @@ export default function FoodGroupManager({ pantryItems, getExpiryStatus, setView
                 />
                 <button onClick={addGroup}>Add</button>
             </div>
-
-
-            {/* {isModalOpen && selectedItem && (
-                <ItemDetailModal
-                    item={selectedItem}
-                    onClose={closeItemModal}
-                    onEdit={handleEditItem}
-                />
-            )} */}
         </div>
     );
 }
@@ -111,7 +127,7 @@ export default function FoodGroupManager({ pantryItems, getExpiryStatus, setView
 
 
 
-function FoodGroup({ groupName, items, getExpiryStatus, openItemModal, setViewItem }) {
+function FoodGroup({ groupName, items, getExpiryStatus, openItemModal, setViewItem, handleDragStart, handleDrop }) {
   const containerRef = useRef(null);
   const [layout, setLayout] = useState('grid'); // or 'list'
 
@@ -131,20 +147,30 @@ function FoodGroup({ groupName, items, getExpiryStatus, openItemModal, setViewIt
   }, []);
 
   return (
-    <section className={`food-group ${layout}`} ref={containerRef}>
-      <h3 className="group-title">{groupName}</h3>
-      <div className="group-items">
+    <section 
+      className={`food-group ${layout}`} 
+      ref={containerRef}
+      onDragOver={(e) => e.preventDefault()} // allow dropping
+      onDrop={() => handleDrop(groupName)}
+    >
+      <h3 
+        className="group-title" 
+        // onDragOver={(e) => e.preventDefault()} // allow dropping
+        // onDrop={() => handleDrop(groupName)}
+      >{groupName}</h3>
+      <div 
+        className="group-items"
+        // onDragOver={(e) => e.preventDefault()} // allow dropping
+        // onDrop={() => handleDrop(groupName)}
+      >
         {items.map(item => (
           <div
             key={item.id}
             className={`group-item ${statusToCssClass(getExpiryStatus(item).status)}`}
             title={`Quantity: ${item.quantity}`}
-            // onClick={() => openItemModal(item)}
             onClick={() => setViewItem(item)}
-            // style={{ 
-            //     borderLeft: `8px solid ${getExpiryStatus(item).color}`, 
-            //     backgroundColor: `${getExpiryStatus(item).color}` 
-            // }}
+            onDragStart={() => handleDragStart(item)}
+            draggable
           >
             <span className="item-name">{item.name}</span>
             <span className="item-quantity">x{item.quantity}</span>

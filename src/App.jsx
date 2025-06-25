@@ -182,6 +182,7 @@ function App() {
 
           <FoodGroupManager 
             pantryItems={pantryItems}
+            setPantryItems={setPantryItems}
             getExpiryStatus={getExpiryStatus}
             setViewItem={setViewItem}
           />
