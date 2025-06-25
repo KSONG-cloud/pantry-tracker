@@ -5,13 +5,15 @@ import App from './App.jsx'
 
 
 import { FoodGroupProvider } from './contexts/FoodGroupContext.jsx'
-
+import { PantryProvider } from './contexts/PantryContext.jsx'
 
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <FoodGroupProvider>
-      <App />
-    </FoodGroupProvider>
+    <PantryProvider>
+      <FoodGroupProvider>
+        <App />
+      </FoodGroupProvider>
+    </PantryProvider>
   </StrictMode>,
 )

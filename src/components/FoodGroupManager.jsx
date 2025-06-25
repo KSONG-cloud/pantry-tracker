@@ -90,8 +90,6 @@ export default function FoodGroupManager({ pantryItems, setPantryItems, getExpir
             
             {foodGroups.map(group => {
                 const itemsInGroup = pantryItems.filter(item => item.group === group);
-                console.log(itemsInGroup);
-                console.log(pantryItems);
                 return (
                     <FoodGroup
                         key={group}
@@ -155,13 +153,9 @@ function FoodGroup({ groupName, items, getExpiryStatus, openItemModal, setViewIt
     >
       <h3 
         className="group-title" 
-        // onDragOver={(e) => e.preventDefault()} // allow dropping
-        // onDrop={() => handleDrop(groupName)}
       >{groupName}</h3>
       <div 
         className="group-items"
-        // onDragOver={(e) => e.preventDefault()} // allow dropping
-        // onDrop={() => handleDrop(groupName)}
       >
         {items.map(item => (
           <div
