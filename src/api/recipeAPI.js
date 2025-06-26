@@ -8,13 +8,14 @@ const BASE_URL = 'https://api.spoonacular.com/recipes';
 
 
 export async function fetchRecipesByIngredients(ingredients) {
-  const response = await axios.get(`${BASE_URL}/findByIngredients`, {
-    params: {
-      ingredients: ingredients.join(','),
-      number: 10,
-      ranking: 1,
-      apiKey: API_KEY,
-    }
-  });
-  return response.data;
+    const response = await axios.get(`${BASE_URL}/findByIngredients`, {
+        params: {
+        ingredients: ingredients.join(','),
+        number: 10,
+        ranking: 1,
+        apiKey: API_KEY,
+        }
+    });
+    console.log("Data from API" + response);
+    return response.data;
 }

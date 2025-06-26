@@ -21,9 +21,9 @@ export default function RecipeRecommendations() {
                     <img src={recipe.image} alt={recipe.title} />
                     <h4>{recipe.title}</h4>
                     <a 
-                    href={`https://spoonacular.com/recipes/${recipe.title.replace(/ /g, '-')}-${recipe.id}`} 
-                    target="_blank"
-                    rel="noreferrer"
+                        href={`https://spoonacular.com/recipes/${recipe.title.replace(/ /g, '-')}-${recipe.id}`} 
+                        target="_blank"
+                        rel="noreferrer"
                     >
                     View Recipe
                     </a>

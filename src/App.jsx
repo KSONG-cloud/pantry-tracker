@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
-import './App.css'
+// import './App.css'
 
 import EditModal from './components/EditModal';
 import ItemCard from './components/ItemCard';
