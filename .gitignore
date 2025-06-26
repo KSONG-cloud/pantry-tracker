@@ -94,3 +94,7 @@ temp/
 
 # Scrap File
 scrap.js
+
+
+# Virtual Environment
+venv/
