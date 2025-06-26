@@ -1,134 +1,89 @@
-# 🥫 Pantry Tracker
+# 🥫 Pantry Tracker & 🧑‍🍳 Recipe Recommender
 
-A smart web application to track your pantry items, get expiration alerts, and discover recipes based on what you have at home.
+A full-stack project to help reduce food waste by tracking pantry inventory and recommending recipes based on available ingredients.
 
-## Features
-
-### Current Features ✅
-- **Inventory Management**: Add, view, and remove pantry items
-- **Expiration Alerts**: Visual warnings for items expiring within 3 days
-- **Clean UI**: Modern, intuitive interface with gradient design
-
-### Planned Features 🚧
-
-- **Responsive Design**: Works seamlessly on desktop and mobile devices
-- **Recipe Recommendations**: Get recipe suggestions based on available ingredients
-- **Recipe Ratings**: Rate recipes and see ratings from other cooking websites
-- **Deal Finder**: Get alerts on sales for items you need
-- **Shopping Lists**: Create and manage shopping lists
-- **Custom Icons**: Add personalized icons for your items
-- **Low Inventory Alerts**: Get notified when items are running low
-- **Barcode Scanning**: Quick item entry via barcode scanning
-
-## Tech Stack
-
-- **Frontend**: React 18 with Vite
-- **Styling**: CSS3 with Grid and Flexbox
-- **State Management**: React useState
-- **Build Tool**: Vite
-- **Version Control**: Git & GitHub
-
-## Getting Started
-
-### Prerequisites
-- Node.js (v14 or higher)
-- npm or yarn
-
-### Installation
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/KSONG-cloud/pantry-tracker.git
-   cd pantry-tracker
-   ```
-
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-3. Start the development server:
-   ```bash
-   npm run dev
-   ```
-
-4. Open [http://localhost:5173](http://localhost:5173) to view it in the browser.
-
-## Usage
-
-1. **Adding Items**: Use the form at the bottom to add new pantry items
-2. **Viewing Items**: All items are displayed in cards showing name, quantity, and expiration date
-3. **Expiration Alerts**: Items expiring within 3 days are highlighted in red
-4. **Removing Items**: Click the "Remove" button on any item card
-
-## Project Structure
-
+## 📦 Project Structure
 ```
-pantry-tracker/
-├── public/
-│   ├── index.html
-│   └── ...
-├── src/
-│   ├── components/     # Reusable UI components (future)
-│   ├── pages/         # Different app screens (future)
-│   ├── services/      # API calls (future)
-│   ├── utils/         # Helper functions (future)
-│   ├── App.js         # Main application component
-│   ├── App.css        # Main stylesheet
-│   └── index.js       # Entry point
-├── package.json
+pantry-project/
+├── pantry-tracker/ # React frontend to manage pantry items
+├── recipe-scraper/ # Python scraper to collect and store recipes
 └── README.md
 ```
 
-## Development Roadmap
+---
 
-### Phase 1: Core Functionality (Current)
-- [x] Basic inventory tracking
-- [x] Expiration date alerts
-- [x] Responsive UI design
-- [ ] Local storage persistence
-- [ ] Search and filter functionality
+## 🧭 Features Overview
 
-### Phase 2: Smart Features
-- [ ] Recipe API integration
-- [ ] Recipe recommendations based on inventory
-- [ ] User authentication
-- [ ] Recipe rating system
+### ✅ Pantry Tracker (Frontend)
+- Add, edit, delete pantry items with expiration tracking.
+- Visual freshness indicators (fresh, expiring, expired).
+- Group items by category (e.g., Dairy, Vegetables).
+- View/edit item details in modals.
+- Drag and drop items between groups.
 
-### Phase 3: Advanced Features
-- [ ] Deal finder integration
-- [ ] Shopping list generation
-- [ ] Barcode scanning
-- [ ] Custom item icons
-- [ ] Nutrition information
+### 🍽️ Recipe Recommender (WIP)
+- Recommends recipes based on pantry contents.
+- Prioritizes:
+  - Exact or partial ingredient matches
+  - High community ratings (with some variety)
+- Plans to support:
+  - User ratings and uploads
+  - Personalized recommendations
 
-### Phase 4: Mobile App
-- [ ] React Native version
-- [ ] Push notifications
-- [ ] Offline functionality
+### 🕸️ Recipe Scraper (WIP)
+- Scrapes selected recipe websites to build a local recipe database.
+- Features:
+  - Respects `robots.txt`
+  - Random sleeps to avoid bans
+  - Resume-safe scraping (start from where it left off)
+  - Estimated time to completion
+  - Multi-site support
+  - Optional Tor/Proxy support for rotating IPs
 
-## Contributing
+---
 
-This is a learning project, but suggestions and feedback are welcome! Please feel free to:
+## 🛠️ Tech Stack
 
-1. Fork the project
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+| Layer         | Tech                            |
+|--------------|----------------------------------|
+| Frontend     | React, Vite, CSS Modules         |
+| State Mgmt   | React Context API                |
+| Backend API  | (Planned) Flask or FastAPI       |
+| Scraping     | Python, BeautifulSoup, Requests  |
+| Database     | PostgreSQL or SQLite (planned)   |
 
-## License
+---
 
-This project is open source and available under the [MIT License](LICENSE).
+## 🧪 How to Run
 
-## Contact
+### Frontend (Pantry Tracker)
+```bash
+cd pantry-tracker
+npm install
+npm run dev
+```
 
-Your Name - kwanshengo.work@gmail.com
+### Scraper (Recipe Collector)
+```bash
+cd recipe-scraper
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+python recipe_scraper.py
+```
 
-Project Link: [https://github.com/KSONG-cloud/pantry-tracker](https://github.com/KSONG-cloud/pantry-tracker)
+---
 
-## Acknowledgments
+## Future Roadmap
 
-- Create React App for the initial setup
-- React community for excellent documentation
-- All the cooking websites that inspire better meal planning!
+[ ] - Full API layer between scraper and frontend
+[ ] - Scheduled background scraping
+[ ] - User accounts & saved recipes
+[ ] - Mobile-first redesign
+[ ] - In-app recipe rating and upload
+[ ] - Nutritional data integration
+
+---
+
+## 🤝 Contributing
+Want to help build this idea into a full product? Pull requests and feedback welcome!
