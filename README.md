@@ -76,12 +76,12 @@ python recipe_scraper.py
 
 ## Future Roadmap
 
-[ ] - Full API layer between scraper and frontend
-[ ] - Scheduled background scraping
-[ ] - User accounts & saved recipes
-[ ] - Mobile-first redesign
-[ ] - In-app recipe rating and upload
-[ ] - Nutritional data integration
+- [ ] Full API layer between scraper and frontend
+- [ ] Scheduled background scraping
+- [ ] User accounts & saved recipes
+- [ ] Mobile-first redesign
+- [ ] In-app recipe rating and upload
+- [ ] Nutritional data integration
 
 ---
 
