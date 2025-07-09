@@ -1,0 +1,11 @@
+{
+  "site_name": "AllRecipes",
+  "domain": "allrecipes.com",
+  "selectors": {
+    "title": "h1.article-heading.text-headline-400",
+    "ingredients": "ul.mm-recipes-structured-ingredients__list",
+    "servings": "",
+    "prep_time": "div.recipe-meta-item:has(span:contains('prep')) span.recipe-meta-item-body",
+    "cook_time": "div.recipe-meta-item:has(span:contains('cook')) span.recipe-meta-item-body"
+  }
+}

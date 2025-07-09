@@ -98,3 +98,7 @@ scrap.js
 
 # Virtual Environment
 venv/
+
+# Py cache
+__pycache__/
+*.py[cod]
