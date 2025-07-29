@@ -4,6 +4,10 @@
   "selectors": {
     "title": "h1.article-heading.text-headline-400",
     "ingredients": "ul.mm-recipes-structured-ingredients__list",
+    "ingredients_pack": "li.mm-recipes-structured-ingredients__list-item",
+    "ingredient_quantity": "[data-ingredient-quantity]",
+    "ingredient_unit": "[data-ingredient-unit]",
+    "ingredient_name": "[data-ingredient-name]",
     "servings": "",
     "prep_time": "div.recipe-meta-item:has(span:contains('prep')) span.recipe-meta-item-body",
     "cook_time": "div.recipe-meta-item:has(span:contains('cook')) span.recipe-meta-item-body"

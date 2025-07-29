@@ -80,6 +80,7 @@ def scrape_recipe(url, selectors):
     def extract_all(selector):
         if not selector.strip():
             return []
+        print(soup.select(selector))
         return [el.get_text(strip=True) for el in soup.select(selector)]
     
     def extract_one(selector):
@@ -88,10 +89,25 @@ def scrape_recipe(url, selectors):
         el = soup.select_one(selector)
         return el.get_text(strip=True) if el else None
     
+    def extract_ingredients(selector):
+        items = []
+        for li in soup.select(selectors["ingredients_pack"]):
+            quantity = li.select_one(selectors.get("ingredient_quantity", ""))
+            unit = li.select_one(selectors.get("ingredient_unit", ""))
+            name = li.select_one(selectors.get("ingredient_name", ""))
+            
+            items.append({
+                "quantity": quantity.get_text(strip=True) if quantity else "",
+                "unit": unit.get_text(strip=True) if unit else "",
+                "name": name.get_text(strip=True) if name else ""
+            })
+        return items
+
+
     recipe = {
         "url": url,
         "title": extract_all(selectors.get("title", "")),
-        "ingredients": extract_all(selectors.get("ingredients", "")),
+        "ingredients": extract_ingredients(selectors.get("ingredients", "")),
         "servings": metadata.get("Servings"),
         "prep_time": metadata.get("Prep Time"),
         "cook_time": extract_one(selectors.get("cook_time", "")),
